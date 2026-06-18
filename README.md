@@ -1,4 +1,4 @@
-# Octarine — Premium Perfume E-Commerce Platform
+# Octarine — Premium Perfume E-Commerce Platform ( Replica )
 
 Octarine is a premium local perfume webstore built with a focus on modern aesthetics, security, and high performance. It features a fully dynamic, PHP-driven backend, a session-based shopping cart system, and a robust administrative panel for seamless inventory management.
 

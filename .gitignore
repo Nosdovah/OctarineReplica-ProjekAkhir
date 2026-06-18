@@ -1,0 +1,10 @@
+# Database configurations (prevent password leaks)
+config/db_modifier.php
+config/db_viewer.php
+
+# Database exports
+database_export.sql
+
+# Ignore macOS/Windows OS files
+.DS_Store
+Thumbs.db

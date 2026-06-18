@@ -1,0 +1,15 @@
+# Disable script execution
+Options -ExecCGI
+AddHandler cgi-script .php .pl .py .jsp .asp .htm .shtml .sh .cgi
+
+# Serve valid image types only
+<FilesMatch "(?i)\.(jpg|jpeg|png|gif|webp)$">
+    Order Allow,Deny
+    Allow from All
+</FilesMatch>
+
+# Block everything else
+<FilesMatch "(?i)\.(php|phtml|php3|php4|php5|php7|php8|phps|js|html|xml)$">
+    Order Allow,Deny
+    Deny from All
+</FilesMatch>

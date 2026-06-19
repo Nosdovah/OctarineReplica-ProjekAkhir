@@ -46,6 +46,31 @@ if (!$mid_banner) {
     ];
 }
 
+// Fetch customer reviews
+try {
+    // Get up to 4 reviews for display
+    $stmt_reviews = $pdo_viewer->query("SELECT * FROM customer_reviews ORDER BY id DESC LIMIT 4");
+    $reviews_data = $stmt_reviews->fetchAll();
+} catch (\PDOException $e) {
+    $reviews_data = false;
+}
+
+if (!$reviews_data || empty($reviews_data)) {
+    // Fallback data
+    $reviews_data = [
+        [
+            'customer_name' => 'Sarah J.',
+            'review_text' => 'Aromanya sangat mewah dan tahan lama, benar-benar setara dengan parfum high-end internasional. Sangat merekomendasikan Vanilla Cake!',
+            'rating' => 5
+        ],
+        [
+            'customer_name' => 'Kevin R.',
+            'review_text' => 'Black OPM is my new daily signature scent. The projection is insane and I keep getting compliments at work.',
+            'rating' => 5
+        ]
+    ];
+}
+
 // Calculate total cart items
 $cart_count = 0;
 if (isset($_SESSION['cart'])) {
@@ -70,8 +95,8 @@ if (isset($_SESSION['cart'])) {
         <div class="container navbar">
             <a href="#" class="logo">OCTARINE</a>
             <nav class="nav-links">
-                <a href="#shop">Shop</a>
-                <a href="#collab">Special Collaboration</a>
+                <a href="shop.php">Shop</a>
+                <a href="#special-collab">Special Collaboration</a>
                 <a href="#promo">Promo</a>
                 <a href="#about">About</a>
                 <a href="#blog">Blog</a>
@@ -204,20 +229,17 @@ if (isset($_SESSION['cart'])) {
             <p>Check out what our customer says about our product</p>
         </div>
         <div class="testimonial-grid">
+             <?php foreach ($reviews_data as $rev): ?>
              <div class="testimonial-card">
                  <div class="stars">
-                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                     <?php for($i = 0; $i < $rev['rating']; $i++): ?>
+                         <i class="fas fa-star"></i>
+                     <?php endfor; ?>
                  </div>
-                 <p>"Aromanya sangat mewah dan tahan lama, benar-benar setara dengan parfum high-end internasional. Sangat merekomendasikan Vanilla Cake!"</p>
-                 <h4>- Sarah J.</h4>
+                 <p>"<?= htmlspecialchars($rev['review_text']) ?>"</p>
+                 <h4>- <?= htmlspecialchars($rev['customer_name']) ?></h4>
              </div>
-             <div class="testimonial-card">
-                 <div class="stars">
-                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                 </div>
-                 <p>"Black OPM is my new daily signature scent. The projection is insane and I keep getting compliments at work."</p>
-                 <h4>- Kevin R.</h4>
-             </div>
+             <?php endforeach; ?>
         </div>
     </section>
 

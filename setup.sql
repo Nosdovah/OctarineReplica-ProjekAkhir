@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS wms_products (
     is_visible TINYINT(1) DEFAULT 1,
     description TEXT NULL,
     image_path VARCHAR(255) NULL,
+    gender_id INT NULL,
+    category_id INT NULL,
     last_synced TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
@@ -44,6 +46,40 @@ CREATE TABLE IF NOT EXISTS mid_banner_settings (
 
 INSERT IGNORE INTO mid_banner_settings (id, title, subtitle, button_text, button_url, image_path) VALUES 
 (1, 'Made with the finest natural ingredients.', 'Explore our ingredient database to learn about where and how these are harvested.', 'Discover Now', '#', NULL);
+
+-- Customer Reviews
+CREATE TABLE IF NOT EXISTS customer_reviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    review_text TEXT NOT NULL,
+    rating INT DEFAULT 5
+);
+
+INSERT IGNORE INTO customer_reviews (id, customer_name, review_text, rating) VALUES 
+(1, 'Sarah J.', 'Aromanya sangat mewah dan tahan lama, benar-benar setara dengan parfum high-end internasional. Sangat merekomendasikan Vanilla Cake!', 5),
+(2, 'Kevin R.', 'Black OPM is my new daily signature scent. The projection is insane and I keep getting compliments at work.', 5);
+
+-- Categories (Gender Preferences and Product Types)
+CREATE TABLE IF NOT EXISTS categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL, /* 'gender' or 'scent' */
+    name VARCHAR(100) NOT NULL
+);
+
+INSERT IGNORE INTO categories (id, type, name) VALUES 
+(1, 'gender', 'MEN'),
+(2, 'gender', 'WOMEN'),
+(3, 'gender', 'UNISEX'),
+(4, 'gender', 'SEGMENTED'),
+(5, 'scent', 'Citrus'),
+(6, 'scent', 'new type'),
+(7, 'scent', 'Ember'),
+(8, 'scent', 'Emberien'),
+(9, 'scent', 'Oud'),
+(10, 'scent', 'Aquatic Citrus'),
+(11, 'scent', 'Arabic');
+
+
 
 -- Least privilege user creation
 CREATE USER IF NOT EXISTS 'viewer'@'localhost' IDENTIFIED BY 'viewer_password';

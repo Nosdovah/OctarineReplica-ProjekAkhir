@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $base_price = $_POST['base_price'] ?? 0;
     $weight = $_POST['weight'] ?? 0;
     $variants_count = $_POST['variants_count'] ?? 0;
+    $gender_id = empty($_POST['gender_id']) ? null : (int)$_POST['gender_id'];
+    $category_id = empty($_POST['category_id']) ? null : (int)$_POST['category_id'];
     $is_visible = isset($_POST['is_visible']) ? 1 : 0;
     $description = $_POST['description'] ?? '';
     $image_path = $product['image_path']; // Keep old image by default
@@ -86,12 +88,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 UPDATE wms_products SET 
                 wms_id = ?, name = ?, sku = ?, brand = ?, product_type = ?, 
                 base_price = ?, weight = ?, variants_count = ?, is_visible = ?, 
-                description = ?, image_path = ?
+                description = ?, image_path = ?, gender_id = ?, category_id = ?
                 WHERE id = ?
             ");
             $stmt->execute([
                 $wms_id, $name, $sku, $brand, $product_type, $base_price, 
-                $weight, $variants_count, $is_visible, $description, $image_path, $id
+                $weight, $variants_count, $is_visible, $description, $image_path, $gender_id, $category_id, $id
             ]);
             header("Location: dashboard.php");
             exit;
@@ -99,6 +101,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = "Database error: " . $e->getMessage();
         }
     }
+}
+
+// Fetch categories for dropdowns
+try {
+    $stmt = $pdo_modifier->query("SELECT * FROM categories ORDER BY name ASC");
+    $all_cats = $stmt->fetchAll();
+    $genders = array_filter($all_cats, fn($c) => $c['type'] === 'gender');
+    $scents = array_filter($all_cats, fn($c) => $c['type'] === 'scent');
+} catch (PDOException $e) {
+    $genders = [];
+    $scents = [];
 }
 ?>
 <!DOCTYPE html>
@@ -119,8 +132,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <nav class="sidebar-nav">
                 <a href="dashboard.php"><i class="fas fa-tachometer-alt" style="width: 20px; text-align: center;"></i> Dashboard</a>
                 <a href="add.php"><i class="fas fa-box" style="width: 20px; text-align: center;"></i> Add Product</a>
+                <a href="categories.php"><i class="fas fa-tags" style="width: 20px; text-align: center;"></i> Categories</a>
                 <a href="hero_edit.php"><i class="fas fa-image" style="width: 20px; text-align: center;"></i> Hero Settings</a>
                 <a href="mid_banner_edit.php"><i class="fas fa-flag" style="width: 20px; text-align: center;"></i> Mid Banner</a>
+                <a href="reviews.php"><i class="fas fa-star" style="width: 20px; text-align: center;"></i> Customer Reviews</a>
                 <div style="border-top: 1px solid #eaeaea; margin: 15px 0;"></div>
                 <a href="../index.php" target="_blank"><i class="fas fa-external-link-alt" style="width: 20px; text-align: center;"></i> Storefront</a>
                 <a href="logout.php" style="color: #d93025;"><i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Logout</a>
@@ -172,8 +187,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="form-group">
-                            <label>Product Type</label>
-                            <input type="text" name="product_type" value="<?= htmlspecialchars($_POST['product_type'] ?? $product['product_type']) ?>">
+                            <label>Gender Preference</label>
+                            <select name="gender_id">
+                                <option value="">-- No Gender Preference --</option>
+                                <?php foreach($genders as $g): ?>
+                                    <option value="<?= $g['id'] ?>" <?= ((isset($_POST['gender_id']) ? $_POST['gender_id'] : $product['gender_id']) == $g['id']) ? 'selected' : '' ?>><?= htmlspecialchars($g['name']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Product Type (Scent)</label>
+                            <select name="category_id">
+                                <option value="">-- No Product Type --</option>
+                                <?php foreach($scents as $s): ?>
+                                    <option value="<?= $s['id'] ?>" <?= ((isset($_POST['category_id']) ? $_POST['category_id'] : $product['category_id']) == $s['id']) ? 'selected' : '' ?>><?= htmlspecialchars($s['name']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Variants Count</label>

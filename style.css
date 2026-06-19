@@ -703,3 +703,41 @@ body.centered-page { background-color: var(--light-bg); display: flex; align-ite
 .btn-admin:hover { background: var(--secondary); }
 .btn-outline-admin { padding: 14px 32px; background: transparent; color: var(--main); border: 1px solid var(--main); border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--transition); text-align: center; }
 .btn-outline-admin:hover { background: var(--main); color: var(--white); }
+
+/* Action Buttons (Edit/Delete) */
+.action-btns {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-edit {
+    background-color: #111; /* Black */
+    color: #fff;
+}
+
+.btn-edit:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Red */
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    color: #fff;
+}

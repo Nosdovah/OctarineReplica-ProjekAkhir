@@ -133,7 +133,7 @@ try {
                                         </td>
                                         <td style="padding: 16px; border-bottom: 1px solid #eaeaea;"><?= htmlspecialchars($cat['name']) ?></td>
                                         <td style="padding: 16px; border-bottom: 1px solid #eaeaea; text-align: center;">
-                                            <a href="categories.php?delete=<?= $cat['id'] ?>" class="btn-icon delete" onclick="return confirm('Are you sure you want to delete this category?')" style="display: inline-flex; text-decoration: none;"><i class="fas fa-trash"></i></a>
+                                            <a href="categories.php?delete=<?= $cat['id'] ?>" class="btn-icon btn-delete" onclick="return confirm('Are you sure you want to delete this category?')" style="display: inline-flex; text-decoration: none;"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

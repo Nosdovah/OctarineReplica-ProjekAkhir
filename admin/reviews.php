@@ -146,7 +146,7 @@ try {
                                         </td>
                                         <td style="padding: 16px; border-bottom: 1px solid #eaeaea; color: var(--secondary); max-width: 300px; line-height: 1.5;">"<?= htmlspecialchars($review['review_text']) ?>"</td>
                                         <td style="padding: 16px; border-bottom: 1px solid #eaeaea; text-align: center;">
-                                            <a href="reviews.php?delete=<?= $review['id'] ?>" class="btn-icon delete" onclick="return confirm('Are you sure you want to delete this review?')" style="display: inline-flex; text-decoration: none;"><i class="fas fa-trash"></i></a>
+                                            <a href="reviews.php?delete=<?= $review['id'] ?>" class="btn-icon btn-delete" onclick="return confirm('Are you sure you want to delete this review?')" style="display: inline-flex; text-decoration: none;"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

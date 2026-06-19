@@ -25,6 +25,7 @@ $products = $stmt->fetchAll();
             <nav class="nav-links">
                 <a href="dashboard.php" style="color: var(--main); font-weight: 700;">Dashboard</a>
                 <a href="add.php">Add Product</a>
+                <a href="hero_edit.php">Hero Settings</a>
                 <a href="../index.php" target="_blank">View Storefront <i class="fas fa-external-link-alt" style="font-size: 12px; margin-left: 4px;"></i></a>
                 <a href="logout.php" style="color: #d93025; margin-left: 16px;">Logout</a>
             </nav>

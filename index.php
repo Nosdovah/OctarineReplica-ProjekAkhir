@@ -7,6 +7,27 @@ require_once 'config/db_viewer.php';
 $stmt = $pdo_viewer->query("SELECT * FROM wms_products WHERE is_visible = 1 ORDER BY id DESC");
 $products = $stmt->fetchAll();
 
+// Fetch hero settings
+try {
+    $stmt_hero = $pdo_viewer->query("SELECT * FROM hero_settings WHERE id = 1");
+    $hero = $stmt_hero->fetch();
+} catch (\PDOException $e) {
+    $hero = false; // Fallback if table doesn't exist yet
+}
+
+if (!$hero) {
+    // Fallback defaults
+    $hero = [
+        'title' => 'OCTARINE',
+        'subtitle' => 'Parfum lokal premium dengan aroma kelas dunia.<br>Discover your scent.',
+        'button1_text' => 'Shop on Tokopedia',
+        'button1_url' => 'https://www.tokopedia.com/octarineperfumeofficial',
+        'button2_text' => 'Shop on Shopee',
+        'button2_url' => 'https://shopee.co.id/octarineperfume.official',
+        'image_path' => null
+    ];
+}
+
 // Calculate total cart items
 $cart_count = 0;
 if (isset($_SESSION['cart'])) {
@@ -52,13 +73,23 @@ if (isset($_SESSION['cart'])) {
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <?php 
+    $hero_style = "";
+    if (!empty($hero['image_path'])) {
+        $hero_style = "style=\"background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url('uploads/" . htmlspecialchars($hero['image_path']) . "') center/cover;\"";
+    }
+    ?>
+    <section class="hero" <?= $hero_style ?>>
         <div class="hero-content container">
-            <h1>OCTARINE</h1>
-            <p>Parfum lokal premium dengan aroma kelas dunia.<br>Discover your scent.</p>
+            <h1><?= htmlspecialchars($hero['title']) ?></h1>
+            <p><?= $hero['subtitle'] // allow HTML for <br> ?></p>
             <div class="hero-buttons">
-                <a href="https://www.tokopedia.com/octarineperfumeofficial" target="_blank" class="btn btn-outline">Shop on Tokopedia</a>
-                <a href="https://shopee.co.id/octarineperfume.official" target="_blank" class="btn btn-outline">Shop on Shopee</a>
+                <?php if (!empty($hero['button1_text'])): ?>
+                <a href="<?= htmlspecialchars($hero['button1_url']) ?>" target="_blank" class="btn btn-outline"><?= htmlspecialchars($hero['button1_text']) ?></a>
+                <?php endif; ?>
+                <?php if (!empty($hero['button2_text'])): ?>
+                <a href="<?= htmlspecialchars($hero['button2_url']) ?>" target="_blank" class="btn btn-outline"><?= htmlspecialchars($hero['button2_text']) ?></a>
+                <?php endif; ?>
             </div>
         </div>
     </section>

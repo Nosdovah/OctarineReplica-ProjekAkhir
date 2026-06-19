@@ -13,8 +13,22 @@ try {
         LIMIT 8
     ");
     $promo_products = $stmt->fetchAll();
+
+    // Fetch promo settings
+    $stmt = $pdo_viewer->query("SELECT * FROM promo_settings WHERE id = 1");
+    $promo_settings = $stmt->fetch();
 } catch (PDOException $e) {
     $promo_products = [];
+    $promo_settings = null;
+}
+
+if (!$promo_settings) {
+    $promo_settings = [
+        'hero_heading' => 'Exclusive Promos & Campaigns',
+        'hero_subheading' => 'Discover exclusive promotions, limited-time campaigns, and special deals tailored just for you.',
+        'hero_image' => '',
+        'carousel_heading' => 'Collaboration Promo'
+    ];
 }
 
 $cart_count = 0;
@@ -60,7 +74,6 @@ if (isset($_SESSION['cart'])) {
             margin: 0 auto;
             height: 500px;
             background-color: #f5f5f5;
-            background-image: url('https://images.unsplash.com/photo-1615486171448-4ffd3b5eb10f?q=80&w=2672&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             border-radius: 8px;
@@ -138,14 +151,14 @@ if (isset($_SESSION['cart'])) {
     <div class="container">
         <!-- Hero Section -->
         <div class="promo-hero">
-            <h1>Exclusive Promos & Campaigns</h1>
-            <p>Discover exclusive promotions, limited-time campaigns, and special deals tailored just for you.</p>
-            <div class="promo-hero-image"></div>
+            <h1><?= htmlspecialchars($promo_settings['hero_heading']) ?></h1>
+            <p><?= nl2br(htmlspecialchars($promo_settings['hero_subheading'])) ?></p>
+            <div class="promo-hero-image" style="<?= $promo_settings['hero_image'] ? "background-image: url('uploads/".htmlspecialchars($promo_settings['hero_image'])."');" : "background-image: url('https://images.unsplash.com/photo-1615486171448-4ffd3b5eb10f?q=80&w=2672&auto=format&fit=crop');" ?>"></div>
         </div>
 
         <!-- Carousel Section -->
         <div class="promo-section">
-            <h2>Collaboration Promo</h2>
+            <h2><?= htmlspecialchars($promo_settings['carousel_heading']) ?></h2>
             
             <div class="carousel-container">
                 <?php if (empty($promo_products)): ?>

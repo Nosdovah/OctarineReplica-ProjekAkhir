@@ -105,6 +105,15 @@ CREATE TABLE IF NOT EXISTS collaborations (
     image_path VARCHAR(255) NULL
 );
 
+-- Promo Page Settings
+CREATE TABLE IF NOT EXISTS promo_settings (
+    id INT PRIMARY KEY,
+    hero_heading VARCHAR(255) DEFAULT 'Exclusive Promos & Campaigns',
+    hero_subheading TEXT NULL,
+    hero_image VARCHAR(255) NULL,
+    carousel_heading VARCHAR(255) DEFAULT 'Collaboration Promo'
+);
+
 
 -- Least privilege user creation
 CREATE USER IF NOT EXISTS 'viewer'@'localhost' IDENTIFIED BY 'viewer_password';

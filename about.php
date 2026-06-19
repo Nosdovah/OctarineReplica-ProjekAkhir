@@ -165,7 +165,7 @@ if (isset($_SESSION['cart'])) {
             <nav class="nav-links">
                 <a href="shop.php">SHOP</a>
                 <a href="#">SPECIAL COLLABORATION</a>
-                <a href="#">PROMO</a>
+                <a href="promo.php">PROMO</a>
                 <a href="about.php" style="color: var(--main); font-weight: 700;">ABOUT</a>
                 <a href="#">BLOG</a>
             </nav>

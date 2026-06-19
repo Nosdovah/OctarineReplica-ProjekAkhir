@@ -63,6 +63,7 @@ try {
                 <a href="categories.php" class="active"><i class="fas fa-tags" style="width: 20px; text-align: center;"></i> Categories</a>
                 <a href="hero_edit.php"><i class="fas fa-image" style="width: 20px; text-align: center;"></i> Hero Settings</a>
                 <a href="mid_banner_edit.php"><i class="fas fa-flag" style="width: 20px; text-align: center;"></i> Mid Banner</a>
+                <a href="about_edit.php"><i class="fas fa-address-card" style="width: 20px; text-align: center;"></i> About Page</a>
                 <a href="reviews.php"><i class="fas fa-star" style="width: 20px; text-align: center;"></i> Customer Reviews</a>
                 <div style="border-top: 1px solid #eaeaea; margin: 15px 0;"></div>
                 <a href="../shop.php" target="_blank"><i class="fas fa-external-link-alt" style="width: 20px; text-align: center;"></i> Storefront</a>

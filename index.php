@@ -98,7 +98,7 @@ if (isset($_SESSION['cart'])) {
                 <a href="shop.php">Shop</a>
                 <a href="#special-collab">Special Collaboration</a>
                 <a href="#promo">Promo</a>
-                <a href="#about">About</a>
+                <a href="about.php">About</a>
                 <a href="#blog">Blog</a>
             </nav>
             <div class="nav-utils">

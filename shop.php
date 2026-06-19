@@ -179,7 +179,7 @@ if (isset($_SESSION['cart'])) {
                 <a href="shop.php" style="color: var(--main); font-weight: 700;">SHOP</a>
                 <a href="#">SPECIAL COLLABORATION</a>
                 <a href="#">PROMO</a>
-                <a href="#">ABOUT</a>
+                <a href="about.php">ABOUT</a>
                 <a href="#">BLOG</a>
             </nav>
             <div class="nav-utils">

@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <header class="header">
-        <div class="container navbar">
+        <div class="container navbar" style="justify-content: flex-start; gap: 40px;">
             <a href="dashboard.php" class="logo">OCTARINE ADMIN</a>
             <nav class="nav-links">
                 <a href="dashboard.php">Dashboard</a>
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="hero_edit.php">Hero Settings</a>
                 <a href="mid_banner_edit.php">Mid Banner</a>
             </nav>
-            <div class="nav-utils">
+            <div class="nav-utils" style="margin-left: auto;">
                 <a href="../index.php" target="_blank" style="font-weight: 600; font-size: 14px;">View Storefront <i class="fas fa-external-link-alt" style="font-size: 12px; margin-left: 4px;"></i></a>
                 <a href="logout.php" style="color: #d93025; font-weight: 600; font-size: 14px; margin-left: 20px;">Logout</a>
             </div>

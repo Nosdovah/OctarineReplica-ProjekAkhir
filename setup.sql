@@ -79,6 +79,31 @@ INSERT IGNORE INTO categories (id, type, name) VALUES
 (10, 'scent', 'Aquatic Citrus'),
 (11, 'scent', 'Arabic');
 
+-- About Page Settings
+CREATE TABLE IF NOT EXISTS about_settings (
+    id INT PRIMARY KEY,
+    banner_image VARCHAR(255) NULL,
+    history_image VARCHAR(255) NULL,
+    history_heading VARCHAR(255) DEFAULT 'OCTARINE HISTORY',
+    history_text TEXT NULL,
+    collab1_title VARCHAR(255) NULL,
+    collab1_text TEXT NULL,
+    collab1_image VARCHAR(255) NULL,
+    collab2_title VARCHAR(255) NULL,
+    collab2_text TEXT NULL,
+    collab2_image VARCHAR(255) NULL,
+    collab3_title VARCHAR(255) NULL,
+    collab3_text TEXT NULL,
+    collab3_image VARCHAR(255) NULL
+);
+
+-- Dynamic Collaborations
+CREATE TABLE IF NOT EXISTS collaborations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NULL,
+    image_path VARCHAR(255) NULL
+);
 
 
 -- Least privilege user creation

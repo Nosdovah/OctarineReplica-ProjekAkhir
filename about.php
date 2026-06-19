@@ -29,6 +29,14 @@ if (!$about) {
     ];
 }
 
+try {
+    $stmt = $pdo_viewer->query("SELECT * FROM collaborations ORDER BY id ASC");
+    $collaborations = $stmt->fetchAll();
+} catch (PDOException $e) {
+    $collaborations = [];
+}
+
+
 $cart_count = 0;
 if (isset($_SESSION['cart'])) {
     foreach ($_SESSION['cart'] as $item) {
@@ -191,26 +199,17 @@ if (isset($_SESSION['cart'])) {
         <div class="collab-section">
             <h2>Special Collaborations</h2>
             <div class="collab-grid">
-                <!-- Collab 1 -->
-                <div class="collab-card">
-                    <div class="collab-image" style="<?= $about['collab1_image'] ? "background-image: url('uploads/".htmlspecialchars($about['collab1_image'])."');" : "" ?>"></div>
-                    <h3><?= htmlspecialchars($about['collab1_title']) ?></h3>
-                    <p><?= nl2br(htmlspecialchars($about['collab1_text'])) ?></p>
-                </div>
-                
-                <!-- Collab 2 -->
-                <div class="collab-card">
-                    <div class="collab-image" style="<?= $about['collab2_image'] ? "background-image: url('uploads/".htmlspecialchars($about['collab2_image'])."');" : "" ?>"></div>
-                    <h3><?= htmlspecialchars($about['collab2_title']) ?></h3>
-                    <p><?= nl2br(htmlspecialchars($about['collab2_text'])) ?></p>
-                </div>
-                
-                <!-- Collab 3 -->
-                <div class="collab-card">
-                    <div class="collab-image" style="<?= $about['collab3_image'] ? "background-image: url('uploads/".htmlspecialchars($about['collab3_image'])."');" : "" ?>"></div>
-                    <h3><?= htmlspecialchars($about['collab3_title']) ?></h3>
-                    <p><?= nl2br(htmlspecialchars($about['collab3_text'])) ?></p>
-                </div>
+                <?php if (empty($collaborations)): ?>
+                    <p style="text-align: center; grid-column: 1 / -1; color: var(--secondary);">No collaborations found.</p>
+                <?php else: ?>
+                    <?php foreach ($collaborations as $collab): ?>
+                        <div class="collab-card">
+                            <div class="collab-image" style="<?= $collab['image_path'] ? "background-image: url('uploads/".htmlspecialchars($collab['image_path'])."');" : "" ?>"></div>
+                            <h3><?= htmlspecialchars($collab['title']) ?></h3>
+                            <p><?= nl2br(htmlspecialchars($collab['description'])) ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>

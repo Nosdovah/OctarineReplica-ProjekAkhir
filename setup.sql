@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS wms_products (
     image_path VARCHAR(255) NULL,
     gender_id INT NULL,
     category_id INT NULL,
+    is_promo TINYINT(1) DEFAULT 0,
     last_synced TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 

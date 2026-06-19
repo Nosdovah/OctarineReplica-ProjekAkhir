@@ -8,7 +8,7 @@ try {
         FROM wms_products p
         LEFT JOIN categories g ON p.gender_id = g.id
         LEFT JOIN categories c ON p.category_id = c.id
-        WHERE p.is_visible = 1
+        WHERE p.is_visible = 1 AND p.is_promo = 1
         ORDER BY p.id DESC
         LIMIT 8
     ");

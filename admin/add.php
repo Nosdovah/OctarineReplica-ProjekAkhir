@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gender_id = empty($_POST['gender_id']) ? null : (int)$_POST['gender_id'];
     $category_id = empty($_POST['category_id']) ? null : (int)$_POST['category_id'];
     $is_visible = isset($_POST['is_visible']) ? 1 : 0;
+    $is_promo = isset($_POST['is_promo']) ? 1 : 0;
     $description = $_POST['description'] ?? '';
     $image_path = null;
 
@@ -75,11 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt = $pdo_modifier->prepare("
                 INSERT INTO wms_products 
-                (wms_id, name, sku, brand, product_type, base_price, weight, variants_count, is_visible, description, image_path, gender_id, category_id) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (wms_id, name, sku, brand, product_type, base_price, weight, variants_count, is_visible, is_promo, description, image_path, gender_id, category_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $stmt->execute([
-                $wms_id, $name, $sku, $brand, $product_type, $base_price, $weight, $variants_count, $is_visible, $description, $image_path, $gender_id, $category_id
+                $wms_id, $name, $sku, $brand, $product_type, $base_price, $weight, $variants_count, $is_visible, $is_promo, $description, $image_path, $gender_id, $category_id
             ]);
             header("Location: dashboard.php");
             exit;
@@ -98,6 +99,14 @@ try {
 } catch (PDOException $e) {
     $genders = [];
     $scents = [];
+}
+
+// Fetch promo carousel heading
+try {
+    $stmt = $pdo_modifier->query("SELECT carousel_heading FROM promo_settings WHERE id = 1");
+    $promo_heading = $stmt->fetchColumn() ?: 'Collaboration Promo';
+} catch (PDOException $e) {
+    $promo_heading = 'Collaboration Promo';
 }
 ?>
 <!DOCTYPE html>
@@ -201,6 +210,13 @@ try {
                             <label class="checkbox-group">
                                 <input type="checkbox" name="is_visible" value="1" <?= (isset($_POST['is_visible']) || $_SERVER['REQUEST_METHOD'] !== 'POST') ? 'checked' : '' ?>>
                                 <span>Make this product visible on the storefront immediately</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group full-width" style="margin-top: -15px;">
+                            <label class="checkbox-group">
+                                <input type="checkbox" name="is_promo" value="1" <?= isset($_POST['is_promo']) ? 'checked' : '' ?>>
+                                <span>Include in <strong><?= htmlspecialchars($promo_heading) ?></strong> (Promo Page)</span>
                             </label>
                         </div>
 

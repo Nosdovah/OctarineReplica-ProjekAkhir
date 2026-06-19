@@ -96,10 +96,8 @@ if (isset($_SESSION['cart'])) {
             <a href="#" class="logo">OCTARINE</a>
             <nav class="nav-links">
                 <a href="shop.php">Shop</a>
-                <a href="#special-collab">Special Collaboration</a>
                 <a href="promo.php">Promo</a>
                 <a href="about.php">About</a>
-                <a href="#blog">Blog</a>
             </nav>
             <div class="nav-utils">
                 <a href="#" aria-label="Search"><i class="fas fa-search"></i></a>

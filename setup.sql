@@ -18,10 +18,10 @@ CREATE TABLE IF NOT EXISTS wms_products (
 );
 
 -- Least privilege user creation
-CREATE USER IF NOT EXISTS 'antigravity_viewer'@'localhost' IDENTIFIED BY 'viewer_password';
+CREATE USER IF NOT EXISTS 'viewer'@'localhost' IDENTIFIED BY 'viewer_password';
 GRANT SELECT ON perfume_store.* TO 'antigravity_viewer'@'localhost';
 
-CREATE USER IF NOT EXISTS 'antigravity_modifier'@'localhost' IDENTIFIED BY 'modifier_password';
-GRANT SELECT, INSERT, UPDATE, DELETE ON perfume_store.* TO 'antigravity_modifier'@'localhost';
+CREATE USER IF NOT EXISTS 'modifier'@'localhost' IDENTIFIED BY 'modifier_password';
+GRANT SELECT, INSERT, UPDATE, DELETE ON perfume_store.* TO 'modifier'@'localhost';
 
 FLUSH PRIVILEGES;

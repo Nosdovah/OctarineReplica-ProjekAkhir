@@ -44,9 +44,10 @@ a {
 
 .navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     height: 100px; /* Reduced from 131px to look sleeker */
+    gap: 40px;
 }
 
 .logo {
@@ -73,6 +74,7 @@ a {
     display: flex;
     align-items: center;
     gap: 20px;
+    margin-left: auto;
 }
 
 .nav-utils i {

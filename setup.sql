@@ -32,6 +32,19 @@ CREATE TABLE IF NOT EXISTS hero_settings (
 INSERT IGNORE INTO hero_settings (id, title, subtitle, button1_text, button1_url, button2_text, button2_url, image_path) VALUES 
 (1, 'OCTARINE', 'Parfum lokal premium dengan aroma kelas dunia.<br>Discover your scent.', 'Shop on Tokopedia', 'https://www.tokopedia.com/octarineperfumeofficial', 'Shop on Shopee', 'https://shopee.co.id/octarineperfume.official', NULL);
 
+-- Mid Banner Settings
+CREATE TABLE IF NOT EXISTS mid_banner_settings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    subtitle TEXT NULL,
+    button_text VARCHAR(100) NULL,
+    button_url VARCHAR(255) NULL,
+    image_path VARCHAR(255) NULL
+);
+
+INSERT IGNORE INTO mid_banner_settings (id, title, subtitle, button_text, button_url, image_path) VALUES 
+(1, 'Made with the finest natural ingredients.', 'Explore our ingredient database to learn about where and how these are harvested.', 'Discover Now', '#', NULL);
+
 -- Least privilege user creation
 CREATE USER IF NOT EXISTS 'viewer'@'localhost' IDENTIFIED BY 'viewer_password';
 GRANT SELECT ON perfume_store.* TO 'antigravity_viewer'@'localhost';

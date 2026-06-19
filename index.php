@@ -28,6 +28,24 @@ if (!$hero) {
     ];
 }
 
+// Fetch mid banner settings
+try {
+    $stmt_banner = $pdo_viewer->query("SELECT * FROM mid_banner_settings WHERE id = 1");
+    $mid_banner = $stmt_banner->fetch();
+} catch (\PDOException $e) {
+    $mid_banner = false; // Fallback
+}
+
+if (!$mid_banner) {
+    $mid_banner = [
+        'title' => 'Made with the finest natural ingredients.',
+        'subtitle' => 'Explore our ingredient database to learn about where and how these are harvested.',
+        'button_text' => 'Discover Now',
+        'button_url' => '#',
+        'image_path' => null
+    ];
+}
+
 // Calculate total cart items
 $cart_count = 0;
 if (isset($_SESSION['cart'])) {
@@ -163,11 +181,19 @@ if (isset($_SESSION['cart'])) {
     </section>
 
     <!-- Mid Banner Section -->
-    <section class="mid-banner">
+    <?php 
+    $banner_style = "";
+    if (!empty($mid_banner['image_path'])) {
+        $banner_style = "style=\"background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('uploads/" . htmlspecialchars($mid_banner['image_path']) . "') center/cover fixed;\"";
+    }
+    ?>
+    <section class="mid-banner" <?= $banner_style ?>>
         <div class="container banner-content">
-            <h2>Made with the finest natural ingredients.</h2>
-            <p>Explore our ingredient database to learn about where and how these are harvested.</p>
-            <a href="#" class="btn btn-solid">Discover Now</a>
+            <h2><?= htmlspecialchars($mid_banner['title']) ?></h2>
+            <p><?= $mid_banner['subtitle'] ?></p>
+            <?php if (!empty($mid_banner['button_text'])): ?>
+            <a href="<?= htmlspecialchars($mid_banner['button_url']) ?>" class="btn btn-solid"><?= htmlspecialchars($mid_banner['button_text']) ?></a>
+            <?php endif; ?>
         </div>
     </section>
 

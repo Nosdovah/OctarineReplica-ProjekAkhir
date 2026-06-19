@@ -26,9 +26,12 @@ $products = $stmt->fetchAll();
                 <a href="dashboard.php" style="color: var(--main); font-weight: 700;">Dashboard</a>
                 <a href="add.php">Add Product</a>
                 <a href="hero_edit.php">Hero Settings</a>
-                <a href="../index.php" target="_blank">View Storefront <i class="fas fa-external-link-alt" style="font-size: 12px; margin-left: 4px;"></i></a>
-                <a href="logout.php" style="color: #d93025; margin-left: 16px;">Logout</a>
+                <a href="mid_banner_edit.php">Mid Banner</a>
             </nav>
+            <div class="nav-utils">
+                <a href="../index.php" target="_blank" style="font-weight: 600; font-size: 14px;">View Storefront <i class="fas fa-external-link-alt" style="font-size: 12px; margin-left: 4px;"></i></a>
+                <a href="logout.php" style="color: #d93025; font-weight: 600; font-size: 14px; margin-left: 20px;">Logout</a>
+            </div>
         </div>
     </header>
 

@@ -99,23 +99,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 </head>
 <body>
-    <header class="header">
-        <div class="container navbar" style="justify-content: flex-start; gap: 40px;">
-            <a href="dashboard.php" class="logo">OCTARINE ADMIN</a>
-            <nav class="nav-links">
-                <a href="dashboard.php">Dashboard</a>
-                <a href="add.php" style="color: var(--main); font-weight: 700;">Add Product</a>
-                <a href="hero_edit.php">Hero Settings</a>
-                <a href="mid_banner_edit.php">Mid Banner</a>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <a href="dashboard.php" class="sidebar-logo">OCTARINE.</a>
+            <nav class="sidebar-nav">
+                <a href="dashboard.php"><i class="fas fa-tachometer-alt" style="width: 20px; text-align: center;"></i> Dashboard</a>
+                <a href="add.php" class="active"><i class="fas fa-box" style="width: 20px; text-align: center;"></i> Add Product</a>
+                <a href="hero_edit.php"><i class="fas fa-image" style="width: 20px; text-align: center;"></i> Hero Settings</a>
+                <a href="mid_banner_edit.php"><i class="fas fa-flag" style="width: 20px; text-align: center;"></i> Mid Banner</a>
+                <div style="border-top: 1px solid #eaeaea; margin: 15px 0;"></div>
+                <a href="../index.php" target="_blank"><i class="fas fa-external-link-alt" style="width: 20px; text-align: center;"></i> Storefront</a>
+                <a href="logout.php" style="color: #d93025;"><i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Logout</a>
             </nav>
-            <div class="nav-utils" style="margin-left: auto;">
-                <a href="../index.php" target="_blank" style="font-weight: 600; font-size: 14px;">View Storefront <i class="fas fa-external-link-alt" style="font-size: 12px; margin-left: 4px;"></i></a>
-                <a href="logout.php" style="color: #d93025; font-weight: 600; font-size: 14px; margin-left: 20px;">Logout</a>
-            </div>
-        </div>
-    </header>
+        </aside>
 
-    <main class="admin-main">
+        <div class="admin-content">
+            <main class="admin-main">
         <div class="container" style="max-width: 900px;">
             <div class="header-top">
                 <h1>Add New Product</h1>
@@ -196,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </form>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 </body>
 </html>

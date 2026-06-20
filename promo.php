@@ -166,7 +166,7 @@ if (isset($_SESSION['cart'])) {
                     <div class="carousel-item">
                         <div class="product-card">
                             <?php if ($product['image_path']): ?>
-                            <div class="product-img" style="background-image: url('uploads/<?= htmlspecialchars($product['image_path']) ?>'); background-size: cover; background-position: center;">
+                            <div class="product-img" style="background-image: url('uploads/<?= htmlspecialchars($product['image_path']) ?>');">
                                 <div class="quick-add" data-id="<?= $product['id'] ?>"><i class="fas fa-plus"></i></div>
                             </div>
                             <?php else: ?>

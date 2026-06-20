@@ -4,7 +4,15 @@ session_start();
 require_once 'config/db_viewer.php';
 
 // Fetch only visible products
-$stmt = $pdo_viewer->query("SELECT * FROM wms_products WHERE is_visible = 1 ORDER BY id DESC");
+$stmt = $pdo_viewer->query("
+    SELECT p.*, g.name as gender_name, c.name as category_name
+    FROM wms_products p
+    LEFT JOIN categories g ON p.gender_id = g.id
+    LEFT JOIN categories c ON p.category_id = c.id
+    WHERE p.is_visible = 1 
+    ORDER BY p.id DESC
+    LIMIT 4
+");
 $products = $stmt->fetchAll();
 
 // Fetch hero settings
@@ -71,6 +79,18 @@ if (!$reviews_data || empty($reviews_data)) {
     ];
 }
 
+// Fetch gender categories to dynamically map Explore Collections links
+try {
+    $stmt_cats = $pdo_viewer->query("SELECT * FROM categories WHERE type = 'gender'");
+    $gender_cats = $stmt_cats->fetchAll();
+    $gender_map = [];
+    foreach($gender_cats as $g) {
+        $gender_map[strtoupper($g['name'])] = $g['id'];
+    }
+} catch (\PDOException $e) {
+    $gender_map = [];
+}
+
 // Calculate total cart items
 $cart_count = 0;
 if (isset($_SESSION['cart'])) {
@@ -79,6 +99,7 @@ if (isset($_SESSION['cart'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,9 +107,11 @@ if (isset($_SESSION['cart'])) {
     <title>Octarine — Parfum Lokal Premium</title>
     <!-- Linking back to the root style.css with cache busting -->
     <link rel="stylesheet" href="style.css?v=<?= filemtime('style.css') ?>">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <!-- Navbar -->
     <header class="header">
@@ -102,9 +125,11 @@ if (isset($_SESSION['cart'])) {
             <div class="nav-utils">
                 <a href="#" aria-label="Search"><i class="fas fa-search"></i></a>
                 <a href="#" aria-label="Wishlist"><i class="far fa-heart"></i><span class="badge">0</span></a>
-                <a href="cart.php" aria-label="Cart"><i class="fas fa-shopping-bag"></i><span class="badge" id="cart-badge"><?= $cart_count ?></span></a>
+                <a href="cart.php" aria-label="Cart"><i class="fas fa-shopping-bag"></i><span class="badge"
+                        id="cart-badge"><?= $cart_count ?></span></a>
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <span style="font-size: 14px; font-weight: 600; margin-left: 10px;">Hi, <?= htmlspecialchars($_SESSION['username']) ?></span>
+                    <span style="font-size: 14px; font-weight: 600; margin-left: 10px;">Hi,
+                        <?= htmlspecialchars($_SESSION['username']) ?></span>
                     <a href="logout.php" class="login-link">Logout</a>
                 <?php else: ?>
                     <a href="login.php" class="login-link">Login</a>
@@ -114,7 +139,7 @@ if (isset($_SESSION['cart'])) {
     </header>
 
     <!-- Hero Section -->
-    <?php 
+    <?php
     $hero_style = "";
     if (!empty($hero['image_path'])) {
         $hero_style = "style=\"background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url('uploads/" . htmlspecialchars($hero['image_path']) . "') center/cover;\"";
@@ -126,10 +151,12 @@ if (isset($_SESSION['cart'])) {
             <p><?= $hero['subtitle'] // allow HTML for <br> ?></p>
             <div class="hero-buttons">
                 <?php if (!empty($hero['button1_text'])): ?>
-                <a href="<?= htmlspecialchars($hero['button1_url']) ?>" target="_blank" class="btn btn-outline"><?= htmlspecialchars($hero['button1_text']) ?></a>
+                    <a href="<?= htmlspecialchars($hero['button1_url']) ?>" target="_blank"
+                        class="btn btn-outline"><?= htmlspecialchars($hero['button1_text']) ?></a>
                 <?php endif; ?>
                 <?php if (!empty($hero['button2_text'])): ?>
-                <a href="<?= htmlspecialchars($hero['button2_url']) ?>" target="_blank" class="btn btn-outline"><?= htmlspecialchars($hero['button2_text']) ?></a>
+                    <a href="<?= htmlspecialchars($hero['button2_url']) ?>" target="_blank"
+                        class="btn btn-outline"><?= htmlspecialchars($hero['button2_text']) ?></a>
                 <?php endif; ?>
             </div>
         </div>
@@ -139,25 +166,25 @@ if (isset($_SESSION['cart'])) {
     <section class="collections container">
         <div class="section-header">
             <h2>Explore Collections</h2>
-            <a href="#shop" class="view-all">View All Collection</a>
+            <a href="shop.php" class="view-all">View All Collection</a>
         </div>
         <div class="collection-grid">
-            <div class="collection-card">
+            <a href="shop.php?gender[]=<?= $gender_map['MEN'] ?? '' ?>" class="collection-card" style="display: block;">
                 <div class="img-placeholder bg-men"></div>
                 <h3>MEN</h3>
-            </div>
-            <div class="collection-card">
+            </a>
+            <a href="shop.php?gender[]=<?= $gender_map['UNISEX'] ?? '' ?>" class="collection-card" style="display: block;">
                 <div class="img-placeholder bg-unisex"></div>
                 <h3>UNISEX</h3>
-            </div>
-            <div class="collection-card">
+            </a>
+            <a href="shop.php?gender[]=<?= $gender_map['WOMEN'] ?? '' ?>" class="collection-card" style="display: block;">
                 <div class="img-placeholder bg-women"></div>
                 <h3>WOMEN</h3>
-            </div>
-            <div class="collection-card">
+            </a>
+            <a href="shop.php?gender[]=<?= $gender_map['SEGMENTED'] ?? '' ?>" class="collection-card" style="display: block;">
                 <div class="img-placeholder bg-segmented"></div>
                 <h3>SEGMENTED</h3>
-            </div>
+            </a>
         </div>
     </section>
 
@@ -165,46 +192,63 @@ if (isset($_SESSION['cart'])) {
     <section class="products container" id="shop">
         <div class="section-header">
             <h2>Our Products</h2>
-            <a href="#shop" class="view-all">View All Products</a>
+            <a href="shop.php" class="view-all">View All Products</a>
         </div>
         <div class="product-grid" id="product-grid">
             <?php foreach ($products as $product): ?>
-            <div class="product-card">
-                <?php if ($product['image_path']): ?>
-                <div class="product-img" style="background-image: url('uploads/<?= htmlspecialchars($product['image_path']) ?>'); background-size: cover; background-position: center;">
-                    <div class="quick-add" data-id="<?= $product['id'] ?>"><i class="fas fa-plus"></i></div>
-                </div>
-                <?php else: ?>
-                <div class="product-img bg-unisex">
-                    <div class="quick-add" data-id="<?= $product['id'] ?>"><i class="fas fa-plus"></i></div>
-                </div>
-                <?php endif; ?>
-                
-                <div class="product-info">
-                    <span class="category"><?= htmlspecialchars($product['product_type']) ?>, <?= htmlspecialchars($product['brand'] ?: 'N/A') ?></span>
-                    <h4><?= htmlspecialchars($product['name']) ?></h4>
-                    <?php 
+                <div class="product-card">
+                    <?php if ($product['image_path']): ?>
+                        <div class="product-img"
+                            style="background-image: url('uploads/<?= htmlspecialchars($product['image_path']) ?>');">
+                            <div class="quick-add" data-id="<?= $product['id'] ?>"><i class="fas fa-plus"></i></div>
+                        </div>
+                    <?php else: ?>
+                        <div class="product-img bg-unisex">
+                            <div class="quick-add" data-id="<?= $product['id'] ?>"><i class="fas fa-plus"></i></div>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="product-info">
+                        <div class="category"
+                            style="font-size: 11px; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">
+                            <?php
+                            $tags = [];
+                            if ($product['gender_name'])
+                                $tags[] = $product['gender_name'];
+                            if ($product['category_name'])
+                                $tags[] = $product['category_name'];
+                            if (empty($tags))
+                                $tags[] = 'Uncategorized';
+                            echo htmlspecialchars(implode(', ', $tags));
+                            ?>
+                        </div>
+                        <h4><?= htmlspecialchars($product['name']) ?></h4>
+                        <?php
                         $desc = $product['description'] ?: 'Premium Fragrance';
                         $words = explode(' ', $desc);
                         if (count($words) > 15) {
                             $desc = implode(' ', array_slice($words, 0, 15)) . '...';
                         }
-                    ?>
-                    <p><?= htmlspecialchars($desc) ?></p>
-                    <div style="font-weight: 600; font-size: 15px; margin-bottom: 12px;">Rp <?= number_format($product['base_price'], 0, ',', '.') ?></div>
-                    <button class="btn-product quick-add-btn" data-id="<?= $product['id'] ?>" style="cursor: pointer;">Add to Cart</button>
+                        ?>
+                        <p><?= htmlspecialchars($desc) ?></p>
+                        <div style="font-weight: 600; font-size: 15px; margin-bottom: 12px;">Rp
+                            <?= number_format($product['base_price'], 0, ',', '.') ?>
+                        </div>
+                        <button class="btn-product quick-add-btn" data-id="<?= $product['id'] ?>"
+                            style="cursor: pointer;">Add to Cart</button>
+                    </div>
                 </div>
-            </div>
             <?php endforeach; ?>
-            
+
             <?php if (empty($products)): ?>
-                <p style="text-align: center; grid-column: 1 / -1; padding: 40px; color: #666;">No products available at the moment.</p>
+                <p style="text-align: center; grid-column: 1 / -1; padding: 40px; color: #666;">No products available at the
+                    moment.</p>
             <?php endif; ?>
         </div>
     </section>
 
     <!-- Mid Banner Section -->
-    <?php 
+    <?php
     $banner_style = "";
     if (!empty($mid_banner['image_path'])) {
         $banner_style = "style=\"background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('uploads/" . htmlspecialchars($mid_banner['image_path']) . "') center/cover fixed;\"";
@@ -215,7 +259,8 @@ if (isset($_SESSION['cart'])) {
             <h2><?= htmlspecialchars($mid_banner['title']) ?></h2>
             <p><?= $mid_banner['subtitle'] ?></p>
             <?php if (!empty($mid_banner['button_text'])): ?>
-            <a href="<?= htmlspecialchars($mid_banner['button_url']) ?>" class="btn btn-solid"><?= htmlspecialchars($mid_banner['button_text']) ?></a>
+                <a href="<?= htmlspecialchars($mid_banner['button_url']) ?>"
+                    class="btn btn-solid"><?= htmlspecialchars($mid_banner['button_text']) ?></a>
             <?php endif; ?>
         </div>
     </section>
@@ -227,17 +272,17 @@ if (isset($_SESSION['cart'])) {
             <p>Check out what our customer says about our product</p>
         </div>
         <div class="testimonial-grid">
-             <?php foreach ($reviews_data as $rev): ?>
-             <div class="testimonial-card">
-                 <div class="stars">
-                     <?php for($i = 0; $i < $rev['rating']; $i++): ?>
-                         <i class="fas fa-star"></i>
-                     <?php endfor; ?>
-                 </div>
-                 <p>"<?= htmlspecialchars($rev['review_text']) ?>"</p>
-                 <h4>- <?= htmlspecialchars($rev['customer_name']) ?></h4>
-             </div>
-             <?php endforeach; ?>
+            <?php foreach ($reviews_data as $rev): ?>
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <?php for ($i = 0; $i < $rev['rating']; $i++): ?>
+                            <i class="fas fa-star"></i>
+                        <?php endfor; ?>
+                    </div>
+                    <p>"<?= htmlspecialchars($rev['review_text']) ?>"</p>
+                    <h4>- <?= htmlspecialchars($rev['customer_name']) ?></h4>
+                </div>
+            <?php endforeach; ?>
         </div>
     </section>
 
@@ -281,8 +326,8 @@ if (isset($_SESSION['cart'])) {
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     const href = this.getAttribute('href');
-                    if(href === '#') return;
-                    
+                    if (href === '#') return;
+
                     const target = document.querySelector(href);
                     if (target) {
                         e.preventDefault();
@@ -304,32 +349,33 @@ if (isset($_SESSION['cart'])) {
             // Add to cart functionality
             const quickAddBtns = document.querySelectorAll('.quick-add, .quick-add-btn');
             const cartBadge = document.getElementById('cart-badge');
-            
+
             quickAddBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
                     const productId = btn.getAttribute('data-id');
-                    
+
                     fetch('cart_action.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: `action=add&product_id=${productId}&quantity=1`
                     })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            cartBadge.textContent = data.total_items;
-                            
-                            // Animation effect
-                            cartBadge.style.transform = 'scale(1.5)';
-                            setTimeout(() => {
-                                cartBadge.style.transform = 'scale(1)';
-                            }, 200);
-                        }
-                    });
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                cartBadge.textContent = data.total_items;
+
+                                // Animation effect
+                                cartBadge.style.transform = 'scale(1.5)';
+                                setTimeout(() => {
+                                    cartBadge.style.transform = 'scale(1)';
+                                }, 200);
+                            }
+                        });
                 });
             });
         });
     </script>
 </body>
+
 </html>

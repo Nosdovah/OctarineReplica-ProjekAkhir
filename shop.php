@@ -236,7 +236,7 @@ if (isset($_SESSION['cart'])) {
                 <?php foreach ($products as $product): ?>
                 <div class="product-card">
                     <?php if ($product['image_path']): ?>
-                    <div class="product-img" style="background-image: url('uploads/<?= htmlspecialchars($product['image_path']) ?>'); background-size: cover; background-position: center;">
+                    <div class="product-img" style="background-image: url('uploads/<?= htmlspecialchars($product['image_path']) ?>');">
                         <div class="quick-add" data-id="<?= $product['id'] ?>"><i class="fas fa-plus"></i></div>
                     </div>
                     <?php else: ?>
@@ -250,9 +250,15 @@ if (isset($_SESSION['cart'])) {
                     <?php endif; ?>
                     
                     <div class="product-info">
-                        <?php if($product['gender_name']): ?>
-                            <div class="gender-badge"><?= htmlspecialchars($product['gender_name']) ?></div>
-                        <?php endif; ?>
+                        <div class="gender-badge" style="font-size: 11px; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">
+                            <?php 
+                            $tags = [];
+                            if($product['gender_name']) $tags[] = $product['gender_name'];
+                            if($product['category_name']) $tags[] = $product['category_name'];
+                            if(empty($tags)) $tags[] = 'Uncategorized';
+                            echo htmlspecialchars(implode(', ', $tags));
+                            ?>
+                        </div>
                         
                         <h3><?= htmlspecialchars($product['name']) ?></h3>
                         <p style="font-size: 13px; color: var(--secondary); margin-bottom: 8px;"><?= htmlspecialchars($product['description'] ?? 'Parfum Garansi Tahan Lama Aroma Fresh by Octarine') ?></p>
